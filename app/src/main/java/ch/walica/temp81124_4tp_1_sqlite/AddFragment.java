@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import ch.walica.temp81124_4tp_1_sqlite.database.DatabaseHelper;
 import ch.walica.temp81124_4tp_1_sqlite.model.Note;
 
 
@@ -23,6 +24,7 @@ public class AddFragment extends Fragment {
     EditText etTitle, etDescription;
     Button btnAdd;
     MaterialToolbar materialToolbar;
+    DatabaseHelper databaseHelper;
 
 
     @Override
@@ -40,6 +42,7 @@ public class AddFragment extends Fragment {
         etDescription = view.findViewById(R.id.etDescription);
         btnAdd = view.findViewById(R.id.btnAdd);
         materialToolbar = view.findViewById(R.id.topAppBar2);
+        databaseHelper = new DatabaseHelper(requireContext());
 
         materialToolbar.setNavigationOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentManager, new HomeFragment()).commit();
@@ -48,13 +51,14 @@ public class AddFragment extends Fragment {
         btnAdd.setOnClickListener(v -> {
             String title = etTitle.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
-            if(!title.isEmpty() && !description.isEmpty()) {
+            if (!title.isEmpty() && !description.isEmpty()) {
                 Note note = new Note(title, description);
+                databaseHelper.addNote(note);
+                etTitle.getText().clear();
+                etDescription.getText().clear();
             } else {
                 Toast.makeText(requireContext(), "Proszę wypełnić formularz", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
