@@ -55,4 +55,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    public void deleteNote(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete("notes", "id=?", new String[]{String.valueOf(id)});
+        if(result == -1) {
+            Toast.makeText(context, "Błąd usuwania notatki", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Notatka usunięta z bazy danych", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

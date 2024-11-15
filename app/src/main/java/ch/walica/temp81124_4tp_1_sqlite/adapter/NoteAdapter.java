@@ -19,9 +19,11 @@ import ch.walica.temp81124_4tp_1_sqlite.model.Note;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder>{
 
     private List<Note> notes;
+    private OnClickNoteListener onClickNoteListener;
 
-    public NoteAdapter(List<Note> notes) {
+    public NoteAdapter(List<Note> notes, OnClickNoteListener onClickNoteListener) {
         this.notes = notes;
+        this.onClickNoteListener = onClickNoteListener;
     }
 
     @NonNull
@@ -41,7 +43,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return notes.size();
     }
 
-    class NoteViewHolder extends RecyclerView.ViewHolder {
+    class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvDate, tvTitle, tvDesc;
         ImageView ivDelete, ivEdit;
@@ -53,6 +55,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             tvDesc = itemView.findViewById(R.id.tvDesc);
             ivDelete = itemView.findViewById(R.id.ivDelete);
             ivEdit = itemView.findViewById(R.id.ivEdit);
+
+            ivDelete.setOnClickListener(this);
+            ivEdit.setOnClickListener(this);
         }
 
         public void bind(Note note) {
@@ -62,6 +67,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             tvDate.setText(sdf.format(date));
             tvTitle.setText(note.getTitle());
             tvDesc.setText(note.getDescription());
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(getAdapterPosition() != RecyclerView.NO_POSITION) {
+                onClickNoteListener.onClickNote(getAdapterPosition(), view);
+            }
         }
     }
 }

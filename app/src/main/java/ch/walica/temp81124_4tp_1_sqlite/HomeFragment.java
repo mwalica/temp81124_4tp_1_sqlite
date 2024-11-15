@@ -37,7 +37,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        noteAdapter = new NoteAdapter(notes);
+        noteAdapter = new NoteAdapter(notes, (position, view) -> {
+            databaseHelper.deleteNote(notes.get(position).getId());
+            notes.remove(notes.remove(position));
+            noteAdapter.notifyItemRemoved(position);
+            noteAdapter.notifyItemRangeChanged(position, notes.size());
+        });
     }
 
     @Override
