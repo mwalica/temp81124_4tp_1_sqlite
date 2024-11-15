@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.walica.temp81124_4tp_1_sqlite.adapter.NoteAdapter;
 import ch.walica.temp81124_4tp_1_sqlite.database.DatabaseHelper;
 import ch.walica.temp81124_4tp_1_sqlite.model.Note;
 
@@ -30,8 +32,13 @@ public class HomeFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     List<Note> notes = new ArrayList<>();
     DatabaseHelper databaseHelper;
+    NoteAdapter noteAdapter;
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        noteAdapter = new NoteAdapter(notes);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +58,9 @@ public class HomeFragment extends Fragment {
         databaseHelper = new DatabaseHelper(requireContext());
 
         setNotesInList();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(noteAdapter);
 
         floatingActionButton.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentManager, new AddFragment()).commit();
