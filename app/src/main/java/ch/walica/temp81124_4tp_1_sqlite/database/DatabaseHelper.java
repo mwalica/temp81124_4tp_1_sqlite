@@ -75,4 +75,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    public void updateNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", note.getTitle());
+        cv.put("description", note.getDescription());
+        int result = db.update("notes", cv, "id=?", new String[]{String.valueOf(note.getId())});
+        if(result == -1) {
+            Toast.makeText(context, "Błąd edycji notatki", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Notatka została zmieniona", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

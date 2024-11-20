@@ -17,6 +17,7 @@ import android.widget.EditText;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import ch.walica.temp81124_4tp_1_sqlite.database.DatabaseHelper;
+import ch.walica.temp81124_4tp_1_sqlite.model.Note;
 
 
 public class UpdateFragment extends Fragment {
@@ -56,6 +57,15 @@ public class UpdateFragment extends Fragment {
             Log.d("my_log", "id = " + id);
             setValueInEditText();
         }
+
+        btnEdit.setOnClickListener(v -> {
+            title = etEditTitle.getText().toString().trim();
+            description = etEditDescription.getText().toString().trim();
+            if(!title.isEmpty() && !description.isEmpty()) {
+                databaseHelper.updateNote(new Note(id, title, description, createDate));
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentManager, new HomeFragment()).commit();
+            }
+        });
     }
 
     private void setValueInEditText() {
