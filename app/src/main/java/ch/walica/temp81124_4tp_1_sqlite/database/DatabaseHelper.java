@@ -65,4 +65,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Notatka usunięta z bazy danych", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public Cursor getNoteById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM notes WHERE id = ?";
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        }
+        return cursor;
+    }
 }

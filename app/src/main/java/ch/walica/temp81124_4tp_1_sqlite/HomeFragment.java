@@ -38,10 +38,19 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         noteAdapter = new NoteAdapter(notes, (position, view) -> {
-            databaseHelper.deleteNote(notes.get(position).getId());
-            notes.remove(notes.remove(position));
-            noteAdapter.notifyItemRemoved(position);
-            noteAdapter.notifyItemRangeChanged(position, notes.size());
+            if(view.getId() == R.id.ivDelete) {
+                databaseHelper.deleteNote(notes.get(position).getId());
+                notes.remove(notes.remove(position));
+                noteAdapter.notifyItemRemoved(position);
+                noteAdapter.notifyItemRangeChanged(position, notes.size());
+            } else if(view .getId() == R.id.ivEdit) {
+                UpdateFragment updateFragment = new UpdateFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", notes.get(position).getId());
+                updateFragment.setArguments(bundle);
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentManager, updateFragment).commit();
+            }
+
         });
     }
 
